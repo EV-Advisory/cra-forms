@@ -1,0 +1,124 @@
+---
+title: ""
+date: "24/10/2021"
+runtime: shiny
+output: 
+  html_document
+params:
+  last_update: "2021-10-24"
+  n_forms: 10
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+require(dplyr)
+require(DT)
+require(shiny)
+require(DiagrammeR)
+forms <- readRDS('data/forms.RDS')
+shinyInput <- function(FUN, id, ...) {
+  as.character(FUN(paste0(id), ...))
+}
+
+forms%>%select(url_loc)%>%tibble::as_tibble()
+
+pretty_form <- forms %>%
+  select(name, path, description, last_update, url_loc,check) %>%
+  dplyr::mutate(
+    btn  = sapply(1:n(), function(x) {
+      if(check[x]==0){
+        
+# as.character(downloadHandler(
+#   filename = function() { 
+#     file_name[x]
+#   }, 
+#   content = function(file) {
+#     download.file(url = url_loc[x],
+#                   destfile = file,
+#                   mode = 'wb',
+#                   quiet = T)
+#   },
+#   outputArgs = list(label = name[x])
+# ))
+      as.character(a(actionButton(inputId = paste0("button-",x),
+        label = name[x],
+        style = "btn btn-primary",
+        onclick = paste0("onclick=\"location.href='", url_loc[x], "';\"")
+      ),href = url_loc[x], target = "_blank"))
+        } else {paste0("<a href=\"",path[x],"\" target = \"_blank\">Please see the form page for more information</a>")}
+      
+    }),
+    name = paste0("<a href = \"", path, "\">", name, "</a>"),
+  ) %>% select(-path,-url_loc,-check)
+
+```
+
+## Forms {.tabset}
+
+> Accessing a repository of forms from the [Canada Revenue Agency](https://www.canada.ca/en/revenue-agency.html)  
+
+**NOTE**: I am not affiliated with the Government of Canada, Canada Revenue Agency or other government entities.   
+
+
+###  Forms by number 
+
+```{r forms}
+DT::datatable(pretty_form,escape = F,colnames = c('Form','About','Last Update','Download'))
+```
+
+### User Guide {.tabset}
+
+Purpose: Having a central directory where tax filers can identify the forms they need and download them conveniently (if applicable).  
+
+This web page stands as of `r params$last_update` where `r params$n_forms` forms were updated
+
+#### Original 
+
+```{r}
+mermaid(diagram = paste0("sequenceDiagram
+  participant u as User
+  participant s as CRA Forms Listing Index
+  participant f as Form Pages
+  participant d as Download
+  u->>s: Visit CRA Forms by Listing page
+  loop Download Forms
+        s->>f: Find the needed schedule
+        f->>d: Download the schedule form
+        d->>s: Navigate CRA pages for needed schedules
+    end
+  loop Use Forms
+        d->>d: Fill in forms
+        d-->>f: Download outstanding/missed
+    end
+
+                             "))
+```
+
+#### Widget  
+
+```{r}
+mermaid(diagram = paste0("sequenceDiagram
+  participant u as User
+  participant s as Web App
+  participant d as Download
+  u->>s: Visit Web app
+  loop Find Forms
+        s->>d: Download and open schedule form
+        d->>s: Search table to download schedule
+    end
+    loop Use Forms
+        d->>d: Fill in forms
+        d-->>s: Download outstanding/missed
+    end
+
+                             "))
+```
+
+
+### {-}
+
+
+## {-}
+
+Maintainer: [Esteban Valencia](mailto:me@estebanvalencia.com)  
+Source: [Github](https://github.com/Esturban/cra-forms)  
