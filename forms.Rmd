@@ -43,7 +43,7 @@ pretty_form <- forms %>%
         label = name[x],
         style = "btn btn-primary",
         onclick = paste0("onclick=\"location.href='", url_loc[x], "';\"")
-      ),href = url_loc[x]))
+      ),href = url_loc[x], target = "_blank"))
         } else {paste0("<a href=\"",path[x],"\" target = \"_blank\">Please see the form page for more information</a>")}
       
     }),
@@ -77,4 +77,4 @@ This web page stands as of `r params$last_update` where `r params$n_forms` forms
 ## {-}
 
 Maintainer: [Esteban Valencia](mailto:me@estebanvalencia.com)  
-Source: 
+Source: [Github](https://github.com/Esturban/cra-forms)  
