@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = F)
 require(dplyr)
 require(DT)
 require(shiny)
+require(DiagrammeR)
 forms <- readRDS('data/forms.RDS')
 shinyInput <- function(FUN, id, ...) {
   as.character(FUN(paste0(id), ...))
@@ -65,13 +66,56 @@ pretty_form <- forms %>%
 DT::datatable(pretty_form,escape = F,colnames = c('Form','About','Last Update','Download'))
 ```
 
-### User Guide  
+### User Guide {.tabset}
 
 Purpose: Having a central directory where tax filers can identify the forms they need and download them conveniently (if applicable).  
 
 This web page stands as of `r params$last_update` where `r params$n_forms` forms were updated
 
+#### Original 
 
+```{r}
+mermaid(diagram = paste0("sequenceDiagram
+  participant u as User
+  participant s as CRA Forms Listing Index
+  participant f as Form Pages
+  participant d as Download
+  u->>s: Visit CRA Forms by Listing page
+  loop Download Forms
+        s->>f: Find the needed schedule
+        f->>d: Download the schedule form
+        d->>s: Navigate CRA pages for needed schedules
+    end
+  loop Use Forms
+        d->>d: Fill in forms
+        d-->>f: Download outstanding/missed
+    end
+
+                             "))
+```
+
+#### Widget  
+
+```{r}
+mermaid(diagram = paste0("sequenceDiagram
+  participant u as User
+  participant s as Web App
+  participant d as Download
+  u->>s: Visit Web app
+  loop Find Forms
+        s->>d: Download and open schedule form
+        d->>s: Search table to download schedule
+    end
+    loop Use Forms
+        d->>d: Fill in forms
+        d-->>s: Download outstanding/missed
+    end
+
+                             "))
+```
+
+
+### {-}
 
 
 ## {-}
