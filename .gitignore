@@ -1,6 +1,9 @@
+**.json
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
 archive
 **.pdf
+**/**.json
+.Renviron
