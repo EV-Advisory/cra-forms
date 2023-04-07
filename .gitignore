@@ -5,4 +5,5 @@
 .Ruserdata
 archive
 **.pdf
-wh-secret.json
+**/**.json
+.Renviron
