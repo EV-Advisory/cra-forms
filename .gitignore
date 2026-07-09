@@ -8,3 +8,7 @@ archive
 **/**.json
 .Renviron
 .codegraph/
+AGENTS.md
+AGENTS.MD
+CLAUDE.md
+GEMINI.md
