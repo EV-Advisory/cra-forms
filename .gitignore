@@ -7,3 +7,4 @@ archive
 **.pdf
 **/**.json
 .Renviron
+.codegraph/
