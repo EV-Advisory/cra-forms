@@ -1,0 +1,6 @@
+# cloudbuild
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/cra-forms-shiny', 'cra-forms']
+images:
+- 'gcr.io/$PROJECT_ID/cra-forms-shiny:v0.0.9'
