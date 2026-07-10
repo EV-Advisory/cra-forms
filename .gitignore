@@ -8,6 +8,8 @@ archive
 **/**.json
 .Renviron
 .codegraph/
+.wolf/
+.claude/
 AGENTS.md
 AGENTS.MD
 CLAUDE.md
