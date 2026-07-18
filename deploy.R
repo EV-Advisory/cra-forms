@@ -10,10 +10,6 @@ if (interactive()){
 }else{
   googleAuthR::gar_auth(token = rjson::fromJSON("GCS_SECRET"),
                         use_oob = T)}
-# cr_setup_auth(file = "wh-secret.json")
-# cr_setup()
-# Set up your Google Cloud Build
-# build <- cr_build_yaml("cloudbuild.yaml")
 cr_deploy_docker(local = "cra-forms",image_name = "cra-forms-shiny",tag = "v0.0.9",timeout = 1800)
 
 # Build the container image
@@ -21,7 +17,6 @@ cr_build(build, timeout = 1800)
 #
 # Deploy your Shiny app to Google Cloud Run
 cr_run(
-  # "gcr.io/work-horse-369310/cra-forms-shiny:v0.0.9",
   paste0(
     "gcr.io/",
     Sys.getenv("GCS_DEFAULT_PROJECT"),
